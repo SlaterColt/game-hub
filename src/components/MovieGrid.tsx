@@ -1,31 +1,11 @@
-import { useEffect, useState } from "react";
-import apiClient from "../services/api-client";
+import { Text } from "@chakra-ui/react";
+import useMovies from "../hooks/useMovies";
 
-interface Movie {
-  id: number;
-  title: string;
-}
-
-interface FetchMoviesResponse {
-  count: number;
-  results: Movie[];
-}
-
-function MovieGrid() {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    apiClient
-      .get<FetchMoviesResponse>("/movies")
-      .then((res) => setMovies(res.data.results))
-      .then((res) => console.log(res))
-      .catch((err) => setError(err.message));
-  });
-
+const MovieGrid = () => {
+  const { movies, error } = useMovies();
   return (
     <>
-      {error && <p>{error}</p>}
+      {error && <Text>{error}</Text>}
       <ul>
         {movies.map((movie) => (
           <li key={movie.id}>{movie.title}</li>
@@ -33,6 +13,6 @@ function MovieGrid() {
       </ul>
     </>
   );
-}
+};
 
 export default MovieGrid;
