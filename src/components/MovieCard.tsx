@@ -14,7 +14,7 @@ const MovieCard = ({ movie }: Props) => {
   console.log(movie);
 
   return (
-    <Card width="300px" borderRadius={10} overflow="hidden">
+    <Card>
       <Image src={getPosterURL(movie.poster_path)} />
       <CardBody>
         <Heading fontSize="2xl">{movie.title}</Heading>
