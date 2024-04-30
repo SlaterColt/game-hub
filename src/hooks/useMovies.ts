@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
-import { CanceledError } from "axios";
+import { AxiosError, CanceledError } from "axios";
 
 export interface Movie {
   id: number;
   title: string;
-  backdrop_path: string;
+  poster_path: string;
   movie_id: number;
+  vote_average: number;
 }
 
 interface FetchMoviesResponse {
@@ -21,13 +22,25 @@ const useMovies = () => {
   useEffect(() => {
     const controller = new AbortController();
 
-    apiClient
-      .get<FetchMoviesResponse>("/movies", {signal: controller.signal})
-      .then((res) => setMovies(res.data.results))
-      .catch((err) => {
-        if (err instanceof CanceledError) return;
-        setError(err.message)
+    const fetchMovies = async() => {
+      
+      try {
+      const {data} = await apiClient.get<FetchMoviesResponse>('/movie/popular', {
+        signal: controller.signal,
       });
+      setMovies(data.results)
+      } catch (error) {
+        if (error instanceof CanceledError) {
+          console.warn('Request cancelled:', error.message);
+          return;
+        }
+
+        console.error ('Error fetching movies:', error);
+        setError((error as AxiosError).message || "An error occurred.")
+      }    
+    }
+
+    fetchMovies();
 
       return () => controller.abort();
   }, []);
