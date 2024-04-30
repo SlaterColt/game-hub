@@ -18,10 +18,13 @@ interface FetchMoviesResponse {
 const useMovies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
+
+    setLoading(true);
     const fetchMovies = async() => {
       
       try {
@@ -29,14 +32,17 @@ const useMovies = () => {
         signal: controller.signal,
       });
       setMovies(data.results)
+      setLoading(false);
       } catch (error) {
         if (error instanceof CanceledError) {
           console.warn('Request cancelled:', error.message);
+          setLoading(false);
           return;
         }
 
         console.error ('Error fetching movies:', error);
         setError((error as AxiosError).message || "An error occurred.")
+
       }    
     }
 
@@ -46,7 +52,7 @@ const useMovies = () => {
   }, []);
 
 
-  return { movies, error };
+  return { movies, error, isLoading };
 }
 
 export default useMovies;

@@ -14,11 +14,11 @@ const MovieCard = ({ movie }: Props) => {
   console.log(movie);
 
   return (
-    <Card borderRadius={10} overflow="hidden">
+    <Card width="300px" borderRadius={10} overflow="hidden">
       <Image src={getPosterURL(movie.poster_path)} />
       <CardBody>
         <Heading fontSize="2xl">{movie.title}</Heading>
-        <HStack justifyContent="space-between">
+        <HStack justifyContent="space-between" paddingTop={"10px"}>
           <AverageVote score={movie.vote_average} />
         </HStack>
       </CardBody>
