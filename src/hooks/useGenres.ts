@@ -23,7 +23,7 @@ const useGenres = () => {
 
     setLoading(true);
     apiClient
-        .get<FetchGenresResponse>('/genre/movie/list', {
+        .get<FetchGenresResponse>('/genres', {
         signal: controller.signal,
       }).then((res) => {
         setGenres(res.data.results);
